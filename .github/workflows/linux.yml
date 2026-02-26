@@ -25,7 +25,7 @@ jobs:
           echo "ARCHNAME=$ARCHNAME" >> $GITHUB_ENV
 
       - name: Install basic libraries
-        run: sudo apt update || true; sudo apt install libheif-dev libraw-dev ffmpeg libgtk-4-dev p7zip-full nasm ninja-build meson pkg-config -y
+        run: sudo apt update || true; sudo apt install libheif-dev libraw-dev libavif-dev libdav1d-dev ffmpeg libgtk-4-dev p7zip-full nasm ninja-build meson pkg-config -y
 
       - name: Setup rust version
         run: rustup default 1.92.0
@@ -38,20 +38,19 @@ jobs:
           
           echo "VERS=release" >> $GITHUB_ENV
           
-          cargo build --release
+          cargo build --release --features "heif,libraw,libavif"
           mv target/release/czkawka_cli linux_czkawka_cli_${{ env.ARCHNAME }}
           mv target/release/czkawka_gui linux_czkawka_gui_${{ env.ARCHNAME }}
           mv target/release/krokiet linux_krokiet_${{ env.ARCHNAME }}
-          cargo build --release --bin krokiet --no-default-features --features "winit_skia_opengl,winit_software"
+          cargo build --release --bin krokiet --no-default-features --features "winit_skia_opengl,winit_software,heif,libraw,libavif"
           mv target/release/krokiet linux_krokiet_skia_opengl_${{ env.ARCHNAME }}
-          cargo build --release --bin krokiet --no-default-features --features "winit_skia_vulkan,winit_software"
+          cargo build --release --bin krokiet --no-default-features --features "winit_skia_vulkan,winit_software,heif,libraw,libavif"
           mv target/release/krokiet linux_krokiet_skia_vulkan_${{ env.ARCHNAME }}
-          cargo build --release --bin krokiet --no-default-features --features "femtovg_wgpu"
+          cargo build --release --bin krokiet --no-default-features --features "femtovg_wgpu,heif,libraw,libavif"
           mv target/release/krokiet linux_krokiet_femtovg_wgpu_${{ env.ARCHNAME }}
-          cargo build --release --bin krokiet --no-default-features --features "winit_femtovg,winit_skia_opengl,winit_skia_vulkan,winit_software,femtovg_wgpu"
+          cargo build --release --bin krokiet --no-default-features --features "winit_femtovg,winit_skia_opengl,winit_skia_vulkan,winit_software,femtovg_wgpu,heif,libraw,libavif"
           mv target/release/krokiet linux_krokiet_all_backends_${{ env.ARCHNAME }}
 
-      # Fast CI profile, to avoid out of disk space errors
       - name: Build Debug
         if: ${{ github.ref != 'refs/heads/master' }}
         run: |
@@ -60,17 +59,17 @@ jobs:
           
           echo "VERS=debug" >> $GITHUB_ENV
           
-          cargo build --profile fastci
+          cargo build --profile fastci --features "heif,libraw,libavif"
           mv target/fastci/czkawka_cli linux_czkawka_cli_${{ env.ARCHNAME }}
           mv target/fastci/czkawka_gui linux_czkawka_gui_${{ env.ARCHNAME }}
           mv target/fastci/krokiet linux_krokiet_${{ env.ARCHNAME }}
-          cargo build --bin krokiet --no-default-features --features "winit_skia_opengl,winit_software" --profile fastci
+          cargo build --bin krokiet --no-default-features --features "winit_skia_opengl,winit_software,heif,libraw,libavif" --profile fastci
           mv target/fastci/krokiet linux_krokiet_skia_opengl_${{ env.ARCHNAME }}
-          cargo build --bin krokiet --no-default-features --features "winit_skia_vulkan,winit_software" --profile fastci
+          cargo build --bin krokiet --no-default-features --features "winit_skia_vulkan,winit_software,heif,libraw,libavif" --profile fastci
           mv target/fastci/krokiet linux_krokiet_skia_vulkan_${{ env.ARCHNAME }}
-          cargo build --bin krokiet --no-default-features --features "femtovg_wgpu" --profile fastci
+          cargo build --bin krokiet --no-default-features --features "femtovg_wgpu,heif,libraw,libavif" --profile fastci
           mv target/fastci/krokiet linux_krokiet_femtovg_wgpu_${{ env.ARCHNAME }}
-          cargo build --bin krokiet --no-default-features --features "winit_femtovg,winit_skia_opengl,winit_skia_vulkan,winit_software,femtovg_wgpu" --profile fastci
+          cargo build --bin krokiet --no-default-features --features "winit_femtovg,winit_skia_opengl,winit_skia_vulkan,winit_software,femtovg_wgpu,heif,libraw,libavif" --profile fastci
           mv target/fastci/krokiet linux_krokiet_all_backends_${{ env.ARCHNAME }}
 
       - name: Pack with 7z
@@ -106,7 +105,6 @@ jobs:
             linux_krokiet_all_backends_${{ env.ARCHNAME }}
           token: ${{ secrets.PAT_REPOSITORY }}
 
-  # Some dependencies requires ubuntu 24.04
   linux-all-extra:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -122,7 +120,7 @@ jobs:
           echo "ARCHNAME=$ARCHNAME" >> $GITHUB_ENV
 
       - name: Install basic libraries
-        run: sudo apt update || true; sudo apt install libheif-dev libraw-dev ffmpeg libgtk-4-dev p7zip-full nasm ninja-build meson pkg-config -y
+        run: sudo apt update || true; sudo apt install libheif-dev libraw-dev libavif-dev libdav1d-dev ffmpeg libgtk-4-dev p7zip-full nasm ninja-build meson pkg-config -y
 
       - name: Setup rust version
         run: rustup default 1.92.0
@@ -202,7 +200,6 @@ jobs:
             linux_krokiet_heif_raw_all_backends_${{ env.ARCHNAME }}
           token: ${{ secrets.PAT_REPOSITORY }}
 
-  ### MUSL CLI and Krokiet Release and Debug
   linux-cli-musl:
     runs-on: ubuntu-22.04
     steps:
@@ -249,7 +246,6 @@ jobs:
             linux_czkawka_cli_musl
           token: ${{ secrets.PAT_REPOSITORY }}
 
-  ### Below, builds that do not produce artifacts
   linux-all-debug-32bit:
     if: ${{ github.ref != 'refs/heads/master' }}
     runs-on: ubuntu-22.04
@@ -289,7 +285,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install basic libraries
-        run: sudo apt update || true; sudo apt install libgtk-4-dev libheif-dev libraw-dev nasm ninja-build meson pkg-config -y
+        run: sudo apt update || true; sudo apt install libgtk-4-dev libheif-dev libraw-dev libavif-dev libdav1d-dev nasm ninja-build meson pkg-config -y
 
       - name: Setup rust version
         run: rustup default 1.92.0
@@ -328,7 +324,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install basic libraries
-        run: sudo apt update || true; sudo apt install libgtk-4-dev libheif-dev libraw-dev nasm ninja-build meson pkg-config -y
+        run: sudo apt update || true; sudo apt install libgtk-4-dev libheif-dev libraw-dev libavif-dev libdav1d-dev nasm ninja-build meson pkg-config -y
 
       - name: Setup rust version
         run: rustup default 1.92.0
@@ -345,7 +341,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install basic libraries
-        run: sudo apt update || true; sudo apt install libgtk-4-dev libheif-dev libraw-dev ffmpeg nasm ninja-build meson pkg-config -y
+        run: sudo apt update || true; sudo apt install libgtk-4-dev libheif-dev libraw-dev libavif-dev libdav1d-dev ffmpeg nasm ninja-build meson pkg-config -y
 
       - name: Setup rust version
         run: rustup default 1.92.0
