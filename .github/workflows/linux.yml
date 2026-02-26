@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, ubuntu-22.04-arm]
+        os: [ubuntu-24.04, ubuntu-24.04-arm]
     steps:
       - uses: actions/checkout@v4
 
@@ -38,17 +38,17 @@ jobs:
           
           echo "VERS=release" >> $GITHUB_ENV
           
-          cargo build --release --features "heif,libraw,libavif"
+          cargo build --release --features "heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif"
           mv target/release/czkawka_cli linux_czkawka_cli_${{ env.ARCHNAME }}
           mv target/release/czkawka_gui linux_czkawka_gui_${{ env.ARCHNAME }}
           mv target/release/krokiet linux_krokiet_${{ env.ARCHNAME }}
-          cargo build --release --bin krokiet --no-default-features --features "winit_skia_opengl,winit_software,heif,libraw,libavif"
+          cargo build --release --bin krokiet --no-default-features --features "winit_skia_opengl,winit_software,heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif"
           mv target/release/krokiet linux_krokiet_skia_opengl_${{ env.ARCHNAME }}
-          cargo build --release --bin krokiet --no-default-features --features "winit_skia_vulkan,winit_software,heif,libraw,libavif"
+          cargo build --release --bin krokiet --no-default-features --features "winit_skia_vulkan,winit_software,heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif"
           mv target/release/krokiet linux_krokiet_skia_vulkan_${{ env.ARCHNAME }}
-          cargo build --release --bin krokiet --no-default-features --features "femtovg_wgpu,heif,libraw,libavif"
+          cargo build --release --bin krokiet --no-default-features --features "femtovg_wgpu,heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif"
           mv target/release/krokiet linux_krokiet_femtovg_wgpu_${{ env.ARCHNAME }}
-          cargo build --release --bin krokiet --no-default-features --features "winit_femtovg,winit_skia_opengl,winit_skia_vulkan,winit_software,femtovg_wgpu,heif,libraw,libavif"
+          cargo build --release --bin krokiet --no-default-features --features "winit_femtovg,winit_skia_opengl,winit_skia_vulkan,winit_software,femtovg_wgpu,heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif"
           mv target/release/krokiet linux_krokiet_all_backends_${{ env.ARCHNAME }}
 
       - name: Build Debug
@@ -59,17 +59,17 @@ jobs:
           
           echo "VERS=debug" >> $GITHUB_ENV
           
-          cargo build --profile fastci --features "heif,libraw,libavif"
+          cargo build --profile fastci --features "heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif"
           mv target/fastci/czkawka_cli linux_czkawka_cli_${{ env.ARCHNAME }}
           mv target/fastci/czkawka_gui linux_czkawka_gui_${{ env.ARCHNAME }}
           mv target/fastci/krokiet linux_krokiet_${{ env.ARCHNAME }}
-          cargo build --bin krokiet --no-default-features --features "winit_skia_opengl,winit_software,heif,libraw,libavif" --profile fastci
+          cargo build --bin krokiet --no-default-features --features "winit_skia_opengl,winit_software,heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif" --profile fastci
           mv target/fastci/krokiet linux_krokiet_skia_opengl_${{ env.ARCHNAME }}
-          cargo build --bin krokiet --no-default-features --features "winit_skia_vulkan,winit_software,heif,libraw,libavif" --profile fastci
+          cargo build --bin krokiet --no-default-features --features "winit_skia_vulkan,winit_software,heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif" --profile fastci
           mv target/fastci/krokiet linux_krokiet_skia_vulkan_${{ env.ARCHNAME }}
-          cargo build --bin krokiet --no-default-features --features "femtovg_wgpu,heif,libraw,libavif" --profile fastci
+          cargo build --bin krokiet --no-default-features --features "femtovg_wgpu,heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif" --profile fastci
           mv target/fastci/krokiet linux_krokiet_femtovg_wgpu_${{ env.ARCHNAME }}
-          cargo build --bin krokiet --no-default-features --features "winit_femtovg,winit_skia_opengl,winit_skia_vulkan,winit_software,femtovg_wgpu,heif,libraw,libavif" --profile fastci
+          cargo build --bin krokiet --no-default-features --features "winit_femtovg,winit_skia_opengl,winit_skia_vulkan,winit_software,femtovg_wgpu,heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif" --profile fastci
           mv target/fastci/krokiet linux_krokiet_all_backends_${{ env.ARCHNAME }}
 
       - name: Pack with 7z
@@ -133,17 +133,17 @@ jobs:
           
           echo "VERS=release" >> $GITHUB_ENV
           
-          cargo build --release --features "heif,libraw,libavif"
+          cargo build --release --features "heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif"
           mv target/release/czkawka_cli linux_czkawka_cli_heif_raw_${{ env.ARCHNAME }}
           mv target/release/czkawka_gui linux_czkawka_gui_heif_raw_${{ env.ARCHNAME }}
           mv target/release/krokiet linux_krokiet_heif_raw_${{ env.ARCHNAME }}
-          cargo build --release --bin krokiet --no-default-features --features "winit_skia_opengl,winit_software,heif,libraw,libavif"
+          cargo build --release --bin krokiet --no-default-features --features "winit_skia_opengl,winit_software,heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif"
           mv target/release/krokiet linux_krokiet_heif_raw_skia_opengl_${{ env.ARCHNAME }}
-          cargo build --release --bin krokiet --no-default-features --features "winit_skia_vulkan,winit_software,heif,libraw,libavif"
+          cargo build --release --bin krokiet --no-default-features --features "winit_skia_vulkan,winit_software,heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif"
           mv target/release/krokiet linux_krokiet_heif_raw_skia_vulkan_${{ env.ARCHNAME }}
-          cargo build --release --bin krokiet --no-default-features --features "femtovg_wgpu,heif,libraw,libavif"
+          cargo build --release --bin krokiet --no-default-features --features "femtovg_wgpu,heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif"
           mv target/release/krokiet linux_krokiet_heif_raw_femtovg_wgpu_${{ env.ARCHNAME }}
-          cargo build --release --bin krokiet --no-default-features --features "winit_femtovg,winit_skia_opengl,winit_skia_vulkan,winit_software,femtovg_wgpu,heif,libraw,libavif"
+          cargo build --release --bin krokiet --no-default-features --features "winit_femtovg,winit_skia_opengl,winit_skia_vulkan,winit_software,femtovg_wgpu,heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif"
           mv target/release/krokiet linux_krokiet_heif_raw_all_backends_${{ env.ARCHNAME }}
 
       - name: Build Debug
@@ -154,17 +154,17 @@ jobs:
           
           echo "VERS=debug" >> $GITHUB_ENV
           
-          cargo build --features "heif,libraw,libavif" --profile fastci
+          cargo build --features "heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif" --profile fastci
           mv target/fastci/czkawka_cli linux_czkawka_cli_heif_raw_${{ env.ARCHNAME }}
           mv target/fastci/czkawka_gui linux_czkawka_gui_heif_raw_${{ env.ARCHNAME }}
           mv target/fastci/krokiet linux_krokiet_heif_raw_${{ env.ARCHNAME }}
-          cargo build --bin krokiet --no-default-features --features "winit_skia_opengl,winit_software,heif,libraw,libavif" --profile fastci
+          cargo build --bin krokiet --no-default-features --features "winit_skia_opengl,winit_software,heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif" --profile fastci
           mv target/fastci/krokiet linux_krokiet_heif_raw_skia_opengl_${{ env.ARCHNAME }}
-          cargo build --bin krokiet --no-default-features --features "winit_skia_vulkan,winit_software,heif,libraw,libavif" --profile fastci
+          cargo build --bin krokiet --no-default-features --features "winit_skia_vulkan,winit_software,heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif" --profile fastci
           mv target/fastci/krokiet linux_krokiet_heif_raw_skia_vulkan_${{ env.ARCHNAME }}
-          cargo build --bin krokiet --no-default-features --features "femtovg_wgpu,heif,libraw,libavif" --profile fastci
+          cargo build --bin krokiet --no-default-features --features "femtovg_wgpu,heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif" --profile fastci
           mv target/fastci/krokiet linux_krokiet_heif_raw_femtovg_wgpu_${{ env.ARCHNAME }}
-          cargo build --bin krokiet --no-default-features --features "winit_femtovg,winit_skia_opengl,winit_skia_vulkan,winit_software,femtovg_wgpu,heif,libraw,libavif" --profile fastci
+          cargo build --bin krokiet --no-default-features --features "winit_femtovg,winit_skia_opengl,winit_skia_vulkan,winit_software,femtovg_wgpu,heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif" --profile fastci
           mv target/fastci/krokiet linux_krokiet_heif_raw_all_backends_${{ env.ARCHNAME }}
 
       - name: Pack with 7z
@@ -201,7 +201,7 @@ jobs:
           token: ${{ secrets.PAT_REPOSITORY }}
 
   linux-cli-musl:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -248,7 +248,7 @@ jobs:
 
   linux-all-debug-32bit:
     if: ${{ github.ref != 'refs/heads/master' }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -293,25 +293,25 @@ jobs:
       - name: Build packages
         run: |
           rm -rf target || true
-          cargo build --features "heif,libraw,libavif"
+          cargo build --features "heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif"
           mv target/debug/czkawka_cli czkawka_cli_debug_1
           mv target/debug/czkawka_gui czkawka_gui_debug_1
           mv target/debug/krokiet krokiet_debug_1
           
           rm -rf target || true
-          cargo build --release --features "heif,libraw,libavif"
+          cargo build --release --features "heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif"
           mv target/release/czkawka_cli czkawka_cli_release_1
           mv target/release/czkawka_gui czkawka_gui_release_1
           mv target/release/krokiet krokiet_release_1
           
           rm -rf target || true
-          cargo build --features "heif,libraw,libavif"
+          cargo build --features "heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif"
           mv target/debug/czkawka_cli czkawka_cli_debug_2
           mv target/debug/czkawka_gui czkawka_gui_debug_2
           mv target/debug/krokiet krokiet_debug_2
           
           rm -rf target || true
-          cargo build --release --features "heif,libraw,libavif"
+          cargo build --release --features "heif,libraw,libavif,czkawka_core/heif,czkawka_core/libraw,czkawka_core/libavif"
           mv target/release/czkawka_cli czkawka_cli_release_2
           mv target/release/czkawka_gui czkawka_gui_release_2
           mv target/release/krokiet krokiet_release_2
@@ -319,7 +319,7 @@ jobs:
           bash misc/compare_files.sh
 
   linux-tests:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -336,7 +336,7 @@ jobs:
           xvfb-run cargo test
 
   linux-regression-tests-on-minimal-rust-version:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -362,7 +362,7 @@ jobs:
 
   android:
     if: ${{ github.ref == 'refs/heads/master' }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
